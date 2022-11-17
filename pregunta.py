@@ -26,7 +26,7 @@ def ingest_data():
         separado = re.split(frase,i)
         fila =  []
         if contador == 0:
-            
+        
             for p in range(len(separado)-1):
                 if p == 0:
                     div1_fila = separado[p].split()
@@ -44,28 +44,35 @@ def ingest_data():
                     principales = separado[p].lower().replace(" ","_") 
                     fila.append(principales)
             lista_pulida.append(fila)
+            
         if contador > 3:
-            if len(separado) > 1:
-                if anexo == 0:
-                    
-                    fila += [separado[1],separado[2],separado[3]]
-                    separado[-1] = separado[-1].replace("\n","")
-                    resto_fila = " ".join(separado[4:])
-                    fila.append(resto_fila)
-                    anexo = 1
-                    lista_pulida.append(fila)
+        
+                if len(separado) > 1:
+                    if separado[1] == "":
+                        anexo = 0
+                    elif anexo == 0:
+                
+                        fila += [int(separado[1]),int(separado[2])]
+                        col3 = separado[3].split(",")
+                        fila.append(float(col3[0]+"."+col3[1][0]))
+                        separado[-1] = separado[-1].replace("\n"," ")
+                        resto_fila = " ".join(separado[4:])
+                        fila.append(resto_fila)
+                        anexo = 1
+                        lista_pulida.append(fila)
+                    else:
+                        separado[-1] = separado[-1].replace("\n"," ")
+                        renglon_extra =  " ".join(separado[1:])
+                        lista_pulida[-1][-1] += renglon_extra
                 else:
-                    separado[-1] = separado[-1].replace("\n","")
-                    renglon_extra =  " ".join(separado[1:])
-                    lista_pulida[-1][-1] += renglon_extra
-            else:
-                anexo = 0
+                    anexo = 0
         contador +=1
-    for i in lista_pulida:
-        i[3] = i[3].replace("   "," ")
-        i[3] = i[3].replace("  "," ")
+    for k in lista_pulida:
+        k[3] = k[3].replace("   "," ")
+        k[3] = k[3].replace("  "," ")
+        k[3] = k[3][:-2]
+
 
     df = pd.DataFrame(lista_pulida[1:],columns = lista_pulida[0])
 
     return df
-print(ingest_data())
