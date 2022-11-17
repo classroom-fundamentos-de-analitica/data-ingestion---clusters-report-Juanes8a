@@ -73,6 +73,8 @@ def ingest_data():
         k[3] = k[3][:-2]
 
     lista_pulida[0][3] += "ve"
+    lista_pulida[6][3] += "l"
     df = pd.DataFrame(lista_pulida[1:],columns = lista_pulida[0])
 
     return df
+
